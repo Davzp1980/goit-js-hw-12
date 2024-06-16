@@ -36,5 +36,5 @@ function imageTemplate(image) {
 }
 
 export function imagesTemplate(arr) {
-  return (imgListElem.innerHTML = arr.map(imageTemplate).join(''));
+  return arr.map(imageTemplate).join('');
 }

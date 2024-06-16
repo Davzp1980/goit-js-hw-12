@@ -93,6 +93,7 @@
   row-gap: 24px;
   column-gap: 24px;
   justify-content: center;
+  margin-bottom: 32px;
 }
 
 .description-list {
@@ -145,4 +146,18 @@
   to {
     transform: rotate(1turn);
   }
+}
+
+/* images list */
+
+/* pagination */
+
+.next-btn {
+  width: 200px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.search-btn.js-next-page-btn {
+  width: 125px;
 }
