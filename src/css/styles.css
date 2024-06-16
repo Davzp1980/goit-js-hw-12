@@ -161,3 +161,9 @@
 .search-btn.js-next-page-btn {
   width: 125px;
 }
+
+@media screen and (max-width: 767px) {
+  .search-input {
+    width: 180px;
+  }
+}
