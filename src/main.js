@@ -22,7 +22,7 @@ const iziToastOptionsForSearch = {
 
 const iziToastOptionsForMorePhotos = {
   iconUrl: icon,
-  backgroundColor: '#8fe5d980',
+  backgroundColor: '#8fe5d9b3',
   position: 'topRight',
   message: `We're sorry, but you've reached the end of search results.`,
 };
