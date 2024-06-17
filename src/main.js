@@ -1,4 +1,4 @@
-import { getFetch } from './js/pixabay-api';
+import { getImages } from './js/pixabay-api';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { imgListElem } from './js/render-functions';
 import iziToast from 'izitoast';
@@ -44,7 +44,7 @@ async function morePhotos() {
   loadingMoreElem.classList.remove('visually-hidden');
 
   try {
-    const responce = await getFetch(currentPage, searchWord);
+    const responce = await getImages(currentPage, searchWord);
     imgListElem.insertAdjacentHTML('beforeend', imagesTemplate(responce.hits));
     gallery.refresh();
     let elem = document.querySelector('.list-item');
@@ -89,7 +89,7 @@ async function loadPhotos(e) {
   }
   searchWord = searchText;
   try {
-    const responce = await getFetch(currentPage, searchText);
+    const responce = await getImages(currentPage, searchText);
 
     if (responce.hits.length === 0) {
       iziToast.show(iziToastOptionsForSearch);
