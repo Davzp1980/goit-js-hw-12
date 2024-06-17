@@ -94,6 +94,7 @@ async function loadPhotos(e) {
     if (responce.hits.length === 0) {
       iziToast.show(iziToastOptionsForSearch);
       loadingElem.classList.add('visually-hidden');
+      formElem.reset();
       return;
     }
     totalHits = responce.totalHits;
