@@ -1,4 +1,4 @@
-import { getFetch, updateFetch } from './js/pixabay-api';
+import { getFetch } from './js/pixabay-api';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { imgListElem } from './js/render-functions';
 import iziToast from 'izitoast';
@@ -40,21 +40,12 @@ let totalHits;
 formElem.addEventListener('submit', loadPhotos);
 nextPageBtnElem.addEventListener('click', morePhotos);
 
-function morePhotos() {
+async function morePhotos() {
   loadingMoreElem.classList.remove('visually-hidden');
-  currentPage += 1;
-  if (currentPage > Math.ceil(totalHits / 15)) {
-    iziToast.show(iziToastOptionsForMorePhotos);
-    nextPageBtnElem.classList.add('visually-hidden');
-    loadingMoreElem.classList.add('visually-hidden');
-    return;
-  }
 
-  updateFetch(currentPage, searchWord).then(res => {
-    totalHits = res.totalHits;
-    loadingMoreElem.classList.add('visually-hidden');
-
-    imgListElem.insertAdjacentHTML('beforeend', imagesTemplate(res.hits));
+  try {
+    const responce = await getFetch(currentPage, searchWord);
+    imgListElem.insertAdjacentHTML('beforeend', imagesTemplate(responce.hits));
     gallery.refresh();
     let elem = document.querySelector('.list-item');
     let rect = elem.getBoundingClientRect();
@@ -63,12 +54,30 @@ function morePhotos() {
       top: -rect.y * 5,
       behavior: 'smooth',
     });
-  });
+  } catch (err) {
+    throw new Error(err);
+  }
+
+  loadingMoreElem.classList.add('visually-hidden');
+
+  currentPage += 1;
+
+  if (currentPage === Math.ceil(totalHits / 15)) {
+    iziToast.show(iziToastOptionsForMorePhotos);
+    nextPageBtnElem.classList.add('visually-hidden');
+    loadingMoreElem.classList.add('visually-hidden');
+    return;
+  }
 }
 
-function loadPhotos(e) {
+async function loadPhotos(e) {
   e.preventDefault();
-
+  if (currentPage === Math.ceil(totalHits / 15)) {
+    iziToast.show(iziToastOptionsForMorePhotos);
+    nextPageBtnElem.classList.add('visually-hidden');
+    loadingMoreElem.classList.add('visually-hidden');
+    return;
+  }
   imgListElem.innerHTML = '';
 
   loadingElem.classList.remove('visually-hidden');
@@ -79,25 +88,25 @@ function loadPhotos(e) {
     return;
   }
   searchWord = searchText;
+  try {
+    const responce = await getFetch(currentPage, searchText);
 
-  getFetch(searchText)
-    .then(data => {
-      if (data.hits.length === 0) {
-        iziToast.show(iziToastOptionsForSearch);
-        loadingElem.classList.add('visually-hidden');
-        return;
-      }
-
+    if (responce.hits.length === 0) {
+      iziToast.show(iziToastOptionsForSearch);
       loadingElem.classList.add('visually-hidden');
+      return;
+    }
+    totalHits = responce.totalHits;
 
-      imgListElem.innerHTML = imagesTemplate(data.hits);
+    loadingElem.classList.add('visually-hidden');
 
-      gallery.refresh();
-      nextPageBtnElem.classList.remove('visually-hidden');
-    })
-    .catch(err => {
-      throw new Error(err);
-    });
+    imgListElem.innerHTML = imagesTemplate(responce.hits);
+
+    gallery.refresh();
+    nextPageBtnElem.classList.remove('visually-hidden');
+  } catch (err) {
+    throw new Error(err);
+  }
 
   formElem.reset();
 }
