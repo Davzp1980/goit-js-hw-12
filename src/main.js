@@ -60,13 +60,14 @@ async function morePhotos() {
 
   loadingMoreElem.classList.add('visually-hidden');
 
+  currentPage += 1;
+
   if (currentPage === Math.ceil(totalHits / 15)) {
     iziToast.show(iziToastOptionsForMorePhotos);
     nextPageBtnElem.classList.add('visually-hidden');
     loadingMoreElem.classList.add('visually-hidden');
     return;
   }
-  currentPage += 1;
 }
 
 async function loadPhotos(e) {
