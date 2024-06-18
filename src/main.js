@@ -44,7 +44,7 @@ async function morePhotos() {
   loadingMoreElem.classList.remove('visually-hidden');
 
   try {
-    const responce = await getImages(currentPage, searchWord);
+    const responce = await getImages(currentPage + 1, searchWord);
     imgListElem.insertAdjacentHTML('beforeend', imagesTemplate(responce.hits));
     gallery.refresh();
     let elem = document.querySelector('.list-item');
@@ -60,18 +60,18 @@ async function morePhotos() {
 
   loadingMoreElem.classList.add('visually-hidden');
 
-  currentPage += 1;
-
   if (currentPage === Math.ceil(totalHits / 15)) {
     iziToast.show(iziToastOptionsForMorePhotos);
     nextPageBtnElem.classList.add('visually-hidden');
     loadingMoreElem.classList.add('visually-hidden');
     return;
   }
+  currentPage += 1;
 }
 
 async function loadPhotos(e) {
   e.preventDefault();
+  currentPage = 1;
   if (currentPage === Math.ceil(totalHits / 15)) {
     iziToast.show(iziToastOptionsForMorePhotos);
     nextPageBtnElem.classList.add('visually-hidden');
